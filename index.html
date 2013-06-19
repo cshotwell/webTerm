@@ -1,5 +1,6 @@
 <html>
 <head>
+<link type="text/css" href="style.css" rel="stylesheet"/>
 <script type="text/javascript">
 
 function staticLoadScript(url)
@@ -9,126 +10,11 @@ function staticLoadScript(url)
 if (typeof jQuery == 'undefined'){
 //staticLoadScript("http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js");
 staticLoadScript("http://code.jquery.com/jquery-latest.min.js");
-
-
-
-
 }
 </script>
 
-<style type='text/css'>
-@font-face{
-font-family:ds_term;src:url('DS_TERM.TTF') format("truetype")
-}
-
-
-body{background-color:black;}
-
-#background{
-    display:block;
-    position:absolute;
-    top:0;
-    left:0;
-    z-index:-1;
-    /*background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#000), to(#FFF));*/
-    background: -webkit-radial-gradient(circle, white, black);
-    height: 100%;
-    width:100%;
-    opacity:0;
-    /*-webkit-transition: opacity .5s;*/
-
-
-}
-
-*{
-padding:0px;
-margin:0px;
-font-family:ds_term;
-}
-.row{
-width:100%;
-height:50px;
-font-size:45px;
-}
-#screen{
-
-    overflow-y:hidden;
-
-}
-.charSpace{
-    display:inline-block;
-
-    font-size:45px;
-    color:#66ff00;
-    opacity:0;
-    <!--float:left;-->
-    text-align:center;
-}
-
-.command{
-    white-space:pre-wrap;
-    color:#66ff00;
-    font-size:45px;
-    display:inline-block;
-
-
-}
-
-@-webkit-keyframes blink{
-
-    from{
-        opactiy:0;
-    }
-    to{
-        opacity:1;
-    }
-
-}
-
-
-.cursor{
-
-display:inline-block;
-opacity:0;
-width:25px;
-height:35px;
-backGround-color:#66ff00;
-
-
-}
-
-.solid{
-    opacity:1;
-}
-
-.blinking{
-
--webkit-animation-name:blink;
--webkit-animation-duration: 500ms;
--webkit-animation-direction:alternate;
--webkit-animation-iteration-count:infinite;
-
-}
-
-
-.animateIn{
--webkit-transition-property :opacity;
--webkit-transition-timing-function:linear;
--webkit-transition-duration:100ms;
-/*width:25px;*/
-opacity:1;
-
-}
-.fadeOut{
-
-
-}
-
-</style>
 <script type="text/javascript">
 $.ajax({cache:false});
-
-
 
 shell = {
     inputOpen:false,
@@ -141,7 +27,6 @@ shell = {
         if(this.countDownTimer != undefined){
             console.log("clearing timer");
             clearTimeout(this.countDownTimer);
-        
         }
     
     },
@@ -208,9 +93,6 @@ shell = {
 
 }
 
-
-
-
 //var commands = new Array();
 
 //var timerStarted = false;
@@ -238,17 +120,13 @@ var about = new shellCommand("about", "All about this page", function(){
     aboutString = "This little terminal emulator is based on my favorite Xscreensaver - Phosphor.  The commands are limited for now, but I may expand it in the future.  Its on github, so Fork Me! \\\\ \\\\";
     
     timedPrint(aboutString, 75);
-
-
 });
 
 var help = new shellCommand("help", "print a help message", function(){
 
     for (var c in shell.commands){
         echo.exe(shell.commands[c].name+" - "+shell.commands[c].help);
-
     }
-
 });
 
 
@@ -273,20 +151,12 @@ var echo = new shellCommand("echo", "print output to screen", function(input){
         }
 
         $('#display').append("<p class='command'>"+input+"</p><br>");
-
-
 });
-
-
-
 
 var reset = new shellCommand("reset", "reset the terminal (reloads page)", function(){
     location.reload();
 
 });
-
-
-
 
 var reddit = new shellCommand("reddit", "The Front Page of the Intenet", function(count){
     
@@ -308,13 +178,9 @@ var reddit = new shellCommand("reddit", "The Front Page of the Intenet", functio
                 //console.log(selfText);
             }
             redditText = redditText + post.title+" \\\\ \\\\ "+selfText+" submited "+timePassed(post.created_utc)+" \\\\ by "+post.author+" \\\\ to "+post.subreddit+" [score: "+post.score+"] \\\\ \\\\ ";
-        
         }
         timedPrint(redditText, 75);
     });
-        
-    
-    
 });
 
 
@@ -352,9 +218,6 @@ function timedPrint(input, interval, callback){
             $('p.cursor').remove().appendTo('#screen');
             screen.scrollTop = screen.scrollHeight;
             shell.starCountDown(timer);
-
-
-
     }
 
     $('#prompt').hide();
@@ -405,47 +268,30 @@ function timedPrint(input, interval, callback){
                 $('<br>').insertBefore('.cursor');
                 charCount=0;
             }
-
-
         }else{
-
             c++
         }
-
-
         screen.scrollTop = screen.scrollHeight;
-
         i++
-
         if(i==input.length){
             stopPrinting();
         }
 
     },interval);
-
     $('#display').append('<br>');
-
 }
 
-
 function convertDate(utc){
-
     var d = new Date(0);
     d.setUTCSeconds(utc);
     return d;
-
 }
-
-
-
-
 
 //make this also support twitters timestamp
 function timePassed(utc) {
 		//var date = new Date((time || "").replace(/-/g,"/").replace(/[TZ]/g," ")),
         var date = new Date(0);
         date.setUTCSeconds(utc);
-        
         
 		diff = (((new Date()).getTime() - date.getTime()) / 1000),
 		day_diff = Math.floor(diff / 86400);
@@ -464,25 +310,13 @@ function timePassed(utc) {
 		day_diff < 31 && Math.ceil( day_diff / 7 ) + " weeks ago";
 	}
 
-
-
-
-
 function htmlSpecials(input){
 
     //.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;")
-
     if(typeof(input) != "undefined"){
         return input.replace(/ /g, "&nbsp");
     }
-
 }
-
-
-
-
-
-
 
 function fallDown(htmlObj){
     
@@ -497,8 +331,6 @@ function fallDown(htmlObj){
     htmlObj[0].style.opacity = 0;
     
     htmlObj[0].addEventListener('webkitTransitionEnd', function(e){htmlObj.remove()}, false);
-    
-    
 }
 
 function makeAllCharSpaces(){
@@ -513,21 +345,13 @@ function makeAllCharSpaces(){
 
         }
         $(this).html(outputHtml);
-
     });
-
-
 }
-
-
-
 
 $(document).ready(function(){
     shell.startCountDown(5);    
     $('body').html('<div id="screen" style="height:99%"><div id="background" ></div><div id="display"></div><p id="prompt" class="command">'+userName+'@'+host+':~$</p><p id="input" class="command"></p><p class="cursor blinking"></p></div>');
-
 });
-
 
 $(function(){
 
@@ -558,10 +382,7 @@ $(function(){
             if($('#background')[0].style.opacity <= 0){
                 fadeIn = true;
             }
-
-        
         }
-        
         if( $('#display > :first').is('br') ){
 
             $('#display > br:first').remove();
@@ -571,22 +392,12 @@ $(function(){
             if($(this).offset().top + $(this).height() < 0){
 
                 fallDown($(this));
-            
             }
         });
-
-        
-    
     });
-
-
     //shell.startCountDown(timeout);
-
-
     $(document).keypress(function(e){
         //console.log('keypress');
-
-
         if(inputOpen){
 
             shell.stopCountDown();
@@ -598,14 +409,10 @@ $(function(){
             var char = String.fromCharCode(code);
 
             //console.log(code+":"+char);
-
             switch(code){
                 //up down arrows…
-
                //return
                 case 13:
-
-
                     $('#display').append('<p class="command">'+promptText+$('#input').text()+'</p><br>');
 
                     if($('#input').text() != ""){
@@ -613,9 +420,7 @@ $(function(){
                     }
                     $('#input').text("");
                     screen.scrollTop = screen.scrollHeight;
-
                 break;
-
 
                 //backspace
                 case 8:
@@ -623,32 +428,18 @@ $(function(){
 
                     break;
 
-
-                //tab
-
+				//tab
                 default:
                     $('#input').append(char);
                     break;
             }
-
         }
-
-
-
     });
-
-
-
-
-
-
 });
 
 </script>
 </head>
-
 <body>
-
 <!--<div id="screen" style="height:99%">
     <div id="background" ></div>
     <div id="display"></div>
@@ -656,7 +447,4 @@ $(function(){
 </div>-->
 
 </body>
-
-
-
 </html>
