@@ -178,6 +178,61 @@ var reddit = new shellCommand("reddit", "The Front Page of the Intenet", functio
     });
 });
 
+var github = new shellCommand("github", "The github", function(input) {
+	text = "";
+	if (!input[0]) {
+		echo.exe("username is required. github <username>");
+	} else {
+
+		var github = new Gh3.User(input[0])
+	,	repoTitle = $("h1")
+	,	branchTitle = $("h2")
+	,	branchProperties = $("ul");
+
+
+		var allRepositories = new Gh3.Repositories(github);
+
+		allRepositories.fetch({page:1, per_page:500, direction : "desc"},"next", function (err, res) {
+		if(err) { throw "outch ..." }
+
+		console.log("Repositories", allRepositories);
+		var repoName = _.shuffle(allRepositories.repositories)[0].name;
+		console.log("reponame",repoName);
+		//get branch
+		var selectedRepository = new Gh3.Repository(repoName, github);
+		console.log("selected repo", selectedRepository);
+
+		selectedRepository.fetchBranches(function (err, res) {
+			if (err) { throw "this didnt work" }
+
+			var master = selectedRepository.getBranchByName("master");
+			console.log("master", master);
+
+			//get contents of master
+			master.fetchContents(function (err, res) {
+				if (err) { throw "unable to fetch branch contents" }
+				master.eachContent(function (content) {
+					console.log("file", content.name);
+				});
+
+				var hasFile = false;
+				while (!hasFile) {
+					var file = _.shuffle(master.getContents())[0];
+					console.log("grabbed", file);
+					if (file.type == "file") {
+						hasFile = true;
+					}
+				}
+				file.fetchContent(function (err, res) {
+					text = file.getRawContent();
+					console.log("length", text.length);
+					timedPrint(text, 75);
+				});
+			});
+		});
+	});
+}
+});
 
 var twitter = new shellCommand("twitter", "The Twitters", function(input) {
   // validate that we have input
@@ -255,22 +310,22 @@ function timedPrint(input, interval, callback){
 
         charCount++;
 
+        if(i==input.length){
+            stopPrinting();
+        }
         if(printWords[w].length-1 == c){
 
             c=0;
-            w++
+            w++;
             if(charCount+printWords[w].length >= charSpace){
                 $('<br>').insertBefore('.cursor');
                 charCount=0;
             }
         }else{
-            c++
+            c++;
         }
         screen.scrollTop = screen.scrollHeight;
-        i++
-        if(i==input.length){
-            stopPrinting();
-        }
+        i++;
 
     },interval);
     $('#display').append('<br>');
